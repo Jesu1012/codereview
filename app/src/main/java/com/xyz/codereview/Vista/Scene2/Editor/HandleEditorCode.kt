@@ -56,12 +56,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import kotlinx.coroutines.CoroutineScope
@@ -73,10 +69,8 @@ import com.xyz.codereview.Modelo.BoxStateManager
 import com.xyz.codereview.Modelo.BoxStateManagerSingleton
 import com.xyz.codereview.Modelo.Server
 import com.xyz.codereview.R
-import com.xyz.codereview.SettingsState
+import com.xyz.codereview.Controlador.SettingsState
 import com.xyz.codereview.Vista.Scene1.Extend.Extend_Further.NavigationItem
-import com.xyz.codereview.Vista.Scene2.Editor.DisplayCodeEditor
-import com.xyz.codereview.Vista.Scene2.Editor.DisplayCodeEditorView
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope.coroutineContext

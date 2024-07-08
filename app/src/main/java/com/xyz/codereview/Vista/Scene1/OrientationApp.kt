@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -46,7 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xyz.codereview.Modelo.GameViewModel
 import com.xyz.codereview.R
-import com.xyz.codereview.SettingsState
+import com.xyz.codereview.Controlador.SettingsState
 import com.xyz.codereview.Vista.Scene1.Base.HeadContent
 import com.xyz.codereview.Vista.Scene1.Extend.Extend_Further.BlockConnection
 import com.xyz.codereview.Vista.Scene1.Extend.*
@@ -134,7 +135,7 @@ fun Drawer(width: Dp) {
     var expandedSubSection21 by remember { mutableStateOf(false) }
     var expandedSubSection12 by remember { mutableStateOf(false) }
     var expandedSubSection22 by remember { mutableStateOf(false) }
-    var suscrito by remember { mutableStateOf(false) }
+    var suscrito = SettingsState.usuarioCurrent != null
 
     fun closeAllSubSections() {
         expandedSubSection11 = false
@@ -245,7 +246,17 @@ fun AccountSection(
                 .fillMaxWidth()
                 .padding(start = 8.dp)) {
             if (suscrito) {
-                UserProfile()
+                if (SettingsState.usuarioCurrent == null){
+                    CircularProgressIndicator()
+                }else{
+                    SettingsState.usuarioCurrent?.let {
+                        PerfilUsuarioC(
+                            it,
+                            {}
+                        )
+                    }
+                }
+
             } else {
                 SectionRow(
                     iconRes = R.drawable.ic_code,
@@ -394,7 +405,8 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
             Scenes.Scene1 -> {
 
                 Scaffold(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                         .background(Color.Black)
                         .padding(top = 20.dp, start = 10.dp),
                     bottomBar = {
@@ -449,7 +461,8 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
             Scenes.Scene2 -> {
 
                 Scaffold(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                         .background(Color.Black)
                         .padding(top = 20.dp, start = 10.dp),
                 ) { padding ->
@@ -462,7 +475,8 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
 
                         if (currentScreen.category == 0){
                             Row {
-                                IconButton(onClick = { setDrawerOpen(true) },colors = IconButtonColors(SettingsState.selectedTheme.color.copy(0.5f), Color.White, Color.White, Color.White), modifier = Modifier.size(50.dp)) {
+                                IconButton(onClick = { setDrawerOpen(true) },colors = IconButtonColors(
+                                    SettingsState.selectedTheme.color.copy(0.5f), Color.White, Color.White, Color.White), modifier = Modifier.size(50.dp)) {
                                     Icon(Icons.Filled.Menu, contentDescription = "Menu", tint = Color.White, modifier = Modifier.fillMaxSize())
                                 }
                                 Spacer(modifier = Modifier.width(10.dp))

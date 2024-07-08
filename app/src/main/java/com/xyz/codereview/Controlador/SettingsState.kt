@@ -1,4 +1,4 @@
-package com.xyz.codereview
+package com.xyz.codereview.Controlador
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,6 +10,7 @@ import com.wakaztahir.codeeditor.theme.CodeThemeType
 import com.xyz.codereview.Modelo.Element
 
 object SettingsState {
+    var usuarioCurrent by mutableStateOf<UsuarioC?>(null)
     var selectedScreen by mutableStateOf<Screen>(Screen.Home)
     var selectedLanguage: CodeLang = CodeLang.Default
     var selectedTheme: CodeThemeType = CodeThemeType.Default
@@ -17,6 +18,7 @@ object SettingsState {
     var initialized = false
     var listSelectedLanguages: MutableList<CodeLang> = mutableListOf()
     var listSelectedTheme: MutableList<CodeThemeType> = mutableListOf()
+
 
     fun initialize() {
         if (!initialized) {
@@ -28,15 +30,6 @@ object SettingsState {
         }
     }
 }
-    //    var mapSelectedLanguages: MutableMap<CodeLang, Boolean> = mutableMapOf()
-//
-//    var selectedLanguage: CodeLang = CodeLang.Default
-//
-//    var selectedTheme: CodeThemeType? = null
-//
-//   fun getAddedCodes(): List<CodeLang> {
-//        return SettingsState.mapSelectedLanguages.filter { it.value }.keys.toList()
-//   }
 
 
 

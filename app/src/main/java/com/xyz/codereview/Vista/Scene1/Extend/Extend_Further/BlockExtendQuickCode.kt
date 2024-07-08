@@ -67,7 +67,7 @@ import com.xyz.codereview.Modelo.BoxStateManagerSingleton
 import com.xyz.codereview.Modelo.Element
 import com.xyz.codereview.Modelo.GameViewModel
 import com.xyz.codereview.R
-import com.xyz.codereview.SettingsState
+import com.xyz.codereview.Controlador.SettingsState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

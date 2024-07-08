@@ -27,7 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.xyz.codereview.SettingsState
+import com.xyz.codereview.Controlador.SettingsState
 import com.xyz.codereview.Vista.Scene1.Base.CloseBar
 import com.xyz.codereview.Vista.Scene1.Extend.Extend_Further.*
 import com.xyz.codereview.Vista.Scene1.Screen

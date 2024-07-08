@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import java.util.UUID
 import android.content.Context
 import com.google.gson.annotations.SerializedName
-import com.xyz.codereview.SettingsState
+import com.xyz.codereview.Controlador.SettingsState
 
 object BoxStateManagerSingleton {
     private val instances = mutableStateListOf<Pair<Element, BoxStateManager>>()

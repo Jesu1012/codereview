@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wakaztahir.codeeditor.prettify.PrettifyParser
 import com.wakaztahir.codeeditor.utils.parseCodeAsAnnotatedString
-import com.xyz.codereview.SettingsState
+import com.xyz.codereview.Controlador.SettingsState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

@@ -34,7 +34,7 @@ import com.wakaztahir.codeeditor.model.CodeLang
 import com.wakaztahir.codeeditor.theme.CodeThemeType
 import com.wakaztahir.codeeditor.theme.Displayable
 import com.xyz.codereview.R
-import com.xyz.codereview.SettingsState
+import com.xyz.codereview.Controlador.SettingsState
 
 
 val themeColors = listOf(

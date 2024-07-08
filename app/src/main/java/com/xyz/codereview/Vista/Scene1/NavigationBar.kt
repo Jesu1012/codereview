@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xyz.codereview.R
-import com.xyz.codereview.SettingsState
+import com.xyz.codereview.Controlador.SettingsState
 
 
 enum class Scenes(){
