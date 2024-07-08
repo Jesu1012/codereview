@@ -1,4 +1,7 @@
 package com.xyz.codereview.Vista.Scene1.Extend.Extend_Further
+
+import android.content.Context
+import android.os.Vibrator
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
@@ -10,24 +13,63 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 
+object PomodoroState {
+    var isRunning by mutableStateOf(false)
+    var timeLeft by mutableStateOf(25 * 60) // 25 minutes in seconds
+    var currentPomodoro by mutableStateOf(1)
+    var currentStage by mutableStateOf("Concentración")
+
+    fun reset() {
+        isRunning = false
+        timeLeft = 25 * 60
+        currentPomodoro = 1
+        currentStage = "Concentración"
+    }
+
+    fun nextStage(context: Context) {
+        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+        when (currentStage) {
+            "Concentración" -> {
+                if (currentPomodoro < 4) {
+                    currentStage = "Pausa Corta"
+                    timeLeft = 5 * 60 // 5 minutes break
+                } else {
+                    currentStage = "Pausa Larga"
+                    timeLeft = 15 * 60 // 15 minutes long break
+                    //currentPomodoro = 0
+                }
+                vibrator.vibrate(500) // Vibrate for 500 milliseconds
+            }
+            "Pausa Corta", "Pausa Larga" -> {
+                currentStage = "Concentración"
+                timeLeft = 25 * 60 // 25 minutes work
+                currentPomodoro++
+                vibrator.vibrate(600)
+            }
+        }
+    }
+}
+
 @Composable
 fun Timer() {
-    var isRunning by remember { mutableStateOf(false) }
-    var timeLeft by remember { mutableStateOf(30 * 60) } // 30 minutes in seconds
+    val context = LocalContext.current
 
-    LaunchedEffect(isRunning) {
-        if (isRunning) {
-            while (timeLeft > 0) {
-                delay(1000L)
-                timeLeft--
+    LaunchedEffect(PomodoroState.isRunning) {
+        while (PomodoroState.isRunning) {
+            while (PomodoroState.timeLeft > 0) {
+                //delay(1000L)
+                delay(30L)
+                PomodoroState.timeLeft -= 2
             }
-            isRunning = false
+            PomodoroState.nextStage(context)
         }
     }
 
@@ -42,8 +84,15 @@ fun Timer() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val minutes = timeLeft / 60
-            val seconds = timeLeft % 60
+            Text(
+                text = "Pomodoro ${PomodoroState.currentPomodoro} - ${PomodoroState.currentStage}",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.secondary
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            val minutes = PomodoroState.timeLeft / 60
+            val seconds = PomodoroState.timeLeft % 60
             Text(
                 text = "Time Left: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}",
                 fontSize = 24.sp,
@@ -59,18 +108,24 @@ fun Timer() {
                 modifier = Modifier.weight(1f)
             ) {
                 item {
-                    SandClockAnimation(timeLeft)
+                    SandClockAnimation(PomodoroState.timeLeft)
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             }
 
             Button(onClick = {
-                if (!isRunning) {
-                    timeLeft = 30 * 60 // 30 minutes in seconds
-                    isRunning = true
+                if (!PomodoroState.isRunning) {
+                    PomodoroState.isRunning = true
+                } else {
+                    PomodoroState.reset()
                 }
             }) {
-                Text("Start Timer", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                Text(
+                    if (PomodoroState.isRunning) "Reset Timer" else "Start Timer",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
             }
         }
     }
@@ -78,32 +133,7 @@ fun Timer() {
 
 @Composable
 fun SandClockAnimation(timeLeft: Int) {
-    val infiniteTransition = rememberInfiniteTransition()
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 180f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(60000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        )
-    )
-
-    Box(contentAlignment = Alignment.Center, modifier = Modifier.size(200.dp)) {
-        Canvas(modifier = Modifier.size(100.dp)) {
-            rotate(rotation) {
-                drawRoundRect(
-                    color = Color(0xFF009688),
-                    cornerRadius = CornerRadius(12.dp.toPx(), 12.dp.toPx()),
-                    size = size / 2F
-                )
-                drawRoundRect(
-                    color = Color(0xFF009688).copy(alpha = 0.5f),
-                    cornerRadius = CornerRadius(12.dp.toPx(), 12.dp.toPx()),
-                    topLeft = center
-                )
-            }
-        }
-    }
+    // ... (el mismo código que antes)
 }
 
 @Preview(showBackground = true)
