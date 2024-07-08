@@ -81,8 +81,6 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope.coroutineContext
 
-
-
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun BlockHandleEditorCode(
@@ -458,9 +456,6 @@ fun HandleEditorCode(
     }
 }
 
-
-
-
 @Composable
 fun DynamicBox(
     index: Int,
@@ -610,7 +605,6 @@ fun DynamicBox(
     }
 }
 
-
 fun getDeleteBlock(text1: String, text2: String): List<Pair<Int, String>> {
     val lines1 = text1.split("\n")
     val lines2 = text2.split("\n")
@@ -628,63 +622,4 @@ fun getDeleteBlock(text1: String, text2: String): List<Pair<Int, String>> {
     return deleteBlock
 }
 
-@Preview
-@Composable
-fun PreviewVentanaPrincipal(){
-    //VentanaPrincipal(Modifier,Color.Green,true)
-}
 
-fun getCode(): String {
-    return """
-        import java.util.Scanner;
-
-        public class HolaMundo {
-        
-            public static void main(String[] args) {
-                // Saludo inicial
-                System.out.println("Hola, mundo!");
-                
-                // Crear una instancia de la clase Saludo
-                Saludo saludo = new Saludo();
-                
-                // Obtener el nombre del usuario
-                Scanner scanner = new Scanner(System.in);
-                System.out.print("Por favor, ingresa tu nombre: ");
-                String nombre = scanner.nextLine();
-                
-                // Mostrar un saludo personalizado
-                saludo.saludar(nombre);
-                
-                // Calcular y mostrar la suma de dos números
-                System.out.print("Ingresa el primer número: ");
-                int num1 = scanner.nextInt();
-                System.out.print("Ingresa el segundo número: ");
-                int num2 = scanner.nextInt();
-                
-                int suma = saludo.sumar(num1, num2);
-                System.out.println("La suma de " + num1 + " y " + num2 + " es: " + suma);
-                
-                // Cerrar el scanner
-                scanner.close();
-            }
-        }
-        
-        class Saludo {
-        
-            // Método para mostrar un saludo personalizado
-            public void saludar(String nombre) {
-                System.out.println("¡Hola, " + nombre + "! Bienvenido al programa.");
-            }
-        
-            // Método para sumar dos números
-            public int sumar(int a, int b) {
-                return a + b;
-            }
-        }
-    """.trimIndent()
-}
-
-@Composable
-fun TextUnit.toDp(): Dp {
-    return with(LocalDensity.current) { this@toDp.toDp() }
-}

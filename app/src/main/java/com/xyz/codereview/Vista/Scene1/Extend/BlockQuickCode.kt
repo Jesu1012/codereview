@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,14 +40,15 @@ import com.xyz.codereview.Vista.Scene1.Extend.Extend_Further.BlockCraft
 import com.xyz.codereview.Vista.Scene1.Extend.Extend_Further.Timer
 
 @Composable
-fun BlockQuickCode(orientation: Int = 0,viewModel: GameViewModel) {
+fun BlockQuickCode(orientation: Int = 0,viewModel: GameViewModel,paddingValues: PaddingValues) {
     var splitterOffset by remember { mutableStateOf(0.9f) }
     val animatedSplitterOffset by animateFloatAsState(targetValue = splitterOffset)
     val minHeight = 100.dp
 
     BoxWithConstraints(modifier = Modifier
-        .padding(end = 20.dp)
-        .fillMaxSize()) {
+        .fillMaxWidth()
+        .padding(end = 15.dp)
+    ) {
         val totalHeight = maxHeight
         val totalWidth = maxWidth
         val draggableHeight = totalHeight - (2 * minHeight)

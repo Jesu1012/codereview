@@ -11,6 +11,9 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import java.net.NetworkInterface
+import java.net.SocketException
+import java.util.Collections
 
 @Serializable
 data class MessageList(val messages: List<String>)
@@ -133,5 +136,21 @@ object Server {
 
     fun isServerRunning(): Boolean {
         return serverRunning
+    }
+    fun getDeviceIpAddress(): String {
+        try {
+            val interfaces = NetworkInterface.getNetworkInterfaces() ?: return "Unknown IP"
+            for (networkInterface in Collections.list(interfaces)) {
+                val addresses = networkInterface.inetAddresses ?: continue
+                for (address in Collections.list(addresses)) {
+                    if (!address.isLoopbackAddress && address.isSiteLocalAddress) {
+                        return address.hostAddress ?: "Unknown IP"
+                    }
+                }
+            }
+        } catch (ex: SocketException) {
+            ex.printStackTrace()
+        }
+        return "Unknown IP"
     }
 }

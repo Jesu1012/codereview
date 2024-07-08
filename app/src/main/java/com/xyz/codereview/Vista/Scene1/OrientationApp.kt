@@ -395,7 +395,8 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
-                        .padding(top = 20.dp),
+                        .background(Color.Black)
+                        .padding(top = 20.dp, start = 10.dp),
                     bottomBar = {
                         SootheNavigationBar( )
                     }
@@ -407,10 +408,7 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
                             .padding(padding)
                             .background(Color.Black)
                     ){
-                        Column(
-                            Modifier
-                                .padding(start = 20.dp)
-                        )
+                        Column()
                         {
                             if (currentScreen.category == 0){
                                 Row {
@@ -426,15 +424,12 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
 
 
                         }
-                        Column (
-                            Modifier
-                                .padding(start = 20.dp)
-                        ){
+                        Column (){
 
                             when (currentScreen) {
                                 Screen.Home -> BlockHome()
                                 //Screen.Projects -> BlockProjects()
-                                Screen.QuickCode -> BlockQuickCode(orientation,viewModel)
+                                Screen.QuickCode -> BlockQuickCode(orientation,viewModel,padding)
                                 Screen.Settings,
                                 Screen.GeneralSettings,
                                 Screen.LanguageSettings,
@@ -455,13 +450,14 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
+                        .background(Color.Black)
+                        .padding(top = 20.dp, start = 10.dp),
                 ) { padding ->
 
                     Column (
                         Modifier
                             .fillMaxSize()
                             .background(Color.Black)
-                            .padding(start = 20.dp)
                     ){
 
                         if (currentScreen.category == 0){
@@ -485,12 +481,6 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
                         when (currentScreen) {
                             Screen.EditorPrincipal ->{
                                 BlockHandleEditorCode(modifier = Modifier.padding(padding),colorTheme = SettingsState.selectedTheme.color,orientation = orientation)
-                            }
-                            Screen.ServerRaspy ->{
-
-                            }
-                            Screen.GameArcore ->{
-                                //RaspberryPiPinout()
                             }
                             else -> {}
                         }

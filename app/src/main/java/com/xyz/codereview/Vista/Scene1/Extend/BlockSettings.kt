@@ -38,7 +38,7 @@ fun BlockSettings(screen: Screen) {
 
     Column(modifier = Modifier
         .fillMaxWidth()
-        .padding(end = 20.dp)
+        .padding(end = 10.dp)
         .verticalScroll(rememberScrollState())
     ){
         if (screen != Screen.Settings){

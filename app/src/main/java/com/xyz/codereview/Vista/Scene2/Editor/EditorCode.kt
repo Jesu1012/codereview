@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.LocalTextStyle
@@ -40,13 +41,12 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
 import com.wakaztahir.codeeditor.prettify.PrettifyParser
 import com.wakaztahir.codeeditor.utils.parseCodeAsAnnotatedString
 import com.xyz.codereview.SettingsState
-import com.xyz.codereview.Vista.Scene1.Extend.Extend_Further.Tile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -300,9 +300,9 @@ fun DisplayCodeEditorView(fullCode: String, deleteBlock: List<Pair<Int, String>>
                 val ranges = calculateRanges(deleteBlock.map { it.first })
                 ranges.forEach { range ->
                     val name = if (range.size > 1) {
-                        "Rango: ${range.first()}-${range.last()}"
+                        "${range.first()}-${range.last()}"
                     } else {
-                        "Rango: ${range.first()}"
+                        "${range.first()}"
                     }
                     val width = if (range.size > 1) 150.dp else 70.dp
                     Tile(name = name, color = Color(0xFFF25022), width = width, height = 70.dp) {
@@ -348,13 +348,21 @@ private fun toggleLineHighlight(
 }
 
 
+@Composable
+fun Tile(name: String, color: Color, width: Dp, height: Dp, onclick: () -> Unit){
+    Box(
+        modifier = Modifier
+            .size(width, height)
+            .background(color, shape = RoundedCornerShape(8.dp))
+            .clickable {
+                onclick()
 
-
-
-
-
-
-
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = name, color = Color.White, fontSize = 16.sp)
+    }
+}
 
 
 

@@ -33,13 +33,13 @@ fun BlockHome(
             modifier = Modifier
                 .fillMaxHeight()
                 .width(350.dp),
-            color = Color.Yellow,
+            color = Color(0xFF8D6531),
             shape = RoundedCornerShape(25.dp) // Mitad de la altura para redondear completamente las esquinas
         ) {
             Image(
-                painter = painterResource(id = R.drawable.publicidad1), // Ajusta el recurso de la imagen según tu archivo drawable
+                painter = painterResource(id = R.drawable.cofe), // Ajusta el recurso de la imagen según tu archivo drawable
                 contentDescription = "Example Icon",
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.Fit,
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -50,13 +50,13 @@ fun BlockHome(
             modifier = Modifier
                 .fillMaxHeight()
                 .width(340.dp),
-            color = Color.Yellow,
+            color = Color.White,
             shape = RoundedCornerShape(25.dp) // Mitad de la altura para redondear completamente las esquinas
         ) {
             Image(
-                painter = painterResource(id = R.drawable.publicidad2), // Ajusta el recurso de la imagen según tu archivo drawable
+                painter = painterResource(id = R.drawable.pc), // Ajusta el recurso de la imagen según tu archivo drawable
                 contentDescription = "Example Icon",
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.Fit,
                 modifier = Modifier.fillMaxSize()
             )
         }
