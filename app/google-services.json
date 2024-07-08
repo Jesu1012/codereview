@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "497747909873",
+    "firebase_url": "https://codereview-3af58-default-rtdb.firebaseio.com",
+    "project_id": "codereview-3af58",
+    "storage_bucket": "codereview-3af58.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497747909873:android:d81e641e7f197bfe3c5d50",
+        "android_client_info": {
+          "package_name": "com.xyz.codereview"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4J9AnVO1dW8rijhRwOsLmTvwiYFuAQiw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

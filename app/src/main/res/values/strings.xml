@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Code_Review</string>
+    <string name="navHome_name">HOME</string>
+    <string name="navQuickCode_name">QUICK CODE</string>
+    <string name="navProjects_name">PROJECTS</string>
+    <string name="navSetting_name">SETTINGS</string>
+    <string name="navProgramming_name">CLONE</string>
+</resources>

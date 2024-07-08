@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Codereview" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.App.SplashScreen" parent="Theme.SplashScreen">
+
+        <item name="windowSplashScreenAnimatedIcon">@drawable/icon512</item>
+        <item name="postSplashScreenTheme">@style/Theme.Codereview</item>
+    </style>
+
+</resources>
