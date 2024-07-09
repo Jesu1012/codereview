@@ -1,9 +1,10 @@
-package com.xyz.codereview.Modelo
+package com.xyz.codereview.Controlador
 
 import android.content.Context
-import android.os.Environment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.xyz.codereview.Modelo.BoxState
+import com.xyz.codereview.Modelo.Element
 import java.io.File
 
 object StorageManager {

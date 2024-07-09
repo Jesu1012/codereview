@@ -27,11 +27,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,7 +42,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -52,7 +56,9 @@ import com.xyz.codereview.Vista.Scene1.Base.HeadContent
 import com.xyz.codereview.Vista.Scene1.Base.*
 import com.xyz.codereview.Vista.Scene1.Extend.Extend_Further.BlockConnection
 import com.xyz.codereview.Vista.Scene1.Extend.*
+import com.xyz.codereview.Vista.Scene1.Extend.Extend_Further.PomodoroState
 import com.xyz.codereview.Vista.Scene2.Editor.BlockHandleEditorCode
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -461,6 +467,18 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
                         .background(Color.Black)
                         .padding(top = 20.dp, start = 10.dp),
                 ) { padding ->
+                    val context = LocalContext.current
+
+                    /*LaunchedEffect(PomodoroState.isRunning) {
+                        while (PomodoroState.isRunning) {
+                            while (PomodoroState.timeLeft > 0) {
+                                //delay(1000L)
+                                delay(30L)
+                                PomodoroState.timeLeft -= 2
+                            }
+                            PomodoroState.nextStage(context)
+                        }
+                    }*/
                     Column (
                         Modifier
                             .fillMaxSize()
@@ -478,6 +496,20 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
                             },colors = IconButtonColors(SettingsState.selectedTheme.color, Color.White, Color.White, Color.White), modifier = Modifier.size(50.dp)) {
                                 Image(painter = painterResource(id = R.drawable.ic_home), contentDescription = "")
                             }
+                            /*if (PomodoroState.isRunning) {
+                                Spacer(modifier = Modifier.weight(1f))
+                                val minutes = PomodoroState.timeLeft / 60
+                                val seconds = PomodoroState.timeLeft % 60
+                                Text(
+                                    text = "${PomodoroState.currentStage}: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}",
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.padding(16.dp)
+                                )
+                            }*/
+
+
                         }
 
                         when (currentScreen) {

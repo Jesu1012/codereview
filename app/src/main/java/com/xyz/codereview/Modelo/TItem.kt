@@ -18,6 +18,7 @@ import java.util.UUID
 import android.content.Context
 import com.google.gson.annotations.SerializedName
 import com.xyz.codereview.Controlador.SettingsState
+import com.xyz.codereview.Controlador.StorageManager
 
 object BoxStateManagerSingleton {
     private val instances = mutableStateListOf<Pair<Element, BoxStateManager>>()
@@ -81,6 +82,10 @@ class BoxStateManager {
 
     fun addBoxState(boxState: BoxState) {
         _boxStates.add(boxState)
+    }
+    fun removeBoxState(index: Int) {
+        val boxState = _boxStates.getOrNull(index) ?: return
+        _boxStates.remove(boxState)
     }
 
     fun updateBoxState(index: Int, boxState: BoxState) {

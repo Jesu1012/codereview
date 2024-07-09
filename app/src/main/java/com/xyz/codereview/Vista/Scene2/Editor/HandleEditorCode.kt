@@ -1,5 +1,6 @@
 package com.xyz.codereview.Vista.Scene2.Editor
 
+
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -7,7 +8,6 @@ import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -30,7 +30,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -65,8 +67,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import com.github.difflib.DiffUtils
 import com.github.difflib.patch.DeltaType
-import com.wakaztahir.codeeditor.theme.CodeTheme
-import com.wakaztahir.codeeditor.theme.CodeThemeType
 import com.xyz.codereview.Modelo.BoxState
 import com.xyz.codereview.Modelo.BoxStateManager
 import com.xyz.codereview.Modelo.BoxStateManagerSingleton
@@ -75,6 +75,7 @@ import com.xyz.codereview.R
 import com.xyz.codereview.Controlador.SettingsState
 import com.xyz.codereview.Modelo.Element
 import com.xyz.codereview.Vista.Scene1.Extend.Extend_Further.NavigationItem
+import com.xyz.codereview.Vista.Scene2.Editor.Extend.TaskList
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope.coroutineContext
@@ -365,126 +366,74 @@ fun HandleEditorCode(
     val clipboardManager: ClipboardManager = LocalContext.current.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val configuration = LocalConfiguration.current
     val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-
-    val scrollState = rememberScrollState()
+    val scrollState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = modifier.fillMaxSize()) {
-            if (orientation == 0) {
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(top = 10.dp)
-                        .horizontalScroll(scrollState),
-                    contentAlignment = Alignment.CenterStart
+    Box(modifier = modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(top = 10.dp),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                LazyRow(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.pointerInput(Unit) {
+                        detectDragGestures { change, dragAmount ->
+                            change.consume()
+                            coroutineScope.launch {
+                                scrollState.scrollBy(0F)
+                            }
+                        }
+                    },
+                    userScrollEnabled = false,
+                    state = scrollState
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start,
-                        modifier = Modifier.pointerInput(Unit) {
-                            detectDragGestures { change, dragAmount ->
-                                change.consume()
-                                coroutineScope.launch {
-                                    scrollState.scrollBy(0f)
-                                }
-                            }
-                        }
-                    ) {
-                        boxStateManager.boxStates.forEachIndexed { index, state ->
-                            DynamicBox(
-                                index = index, // Pasamos el índice aquí
-                                modifier = if (isPortrait)
-                                    Modifier
-                                        .fillMaxWidth(0.8f)
-                                        .aspectRatio(0.5f)
-                                else Modifier
-                                    .fillMaxHeight(0.8f)
-                                    .aspectRatio(2f),
-                                colorTheme = colorTheme,
-                                clipboardManager = clipboardManager,
-                                state = state,
-                                onStateChange = { newState ->
-                                    boxStateManager.updateBoxState(index, newState)
-                                },
-                                coroutineScope = coroutineScope,
-                                scrollState = scrollState,
-                                boxStateManager = boxStateManager
-                            )
-                            Spacer(modifier = Modifier.width(10.dp))
-                        }
-
-                        Spacer(modifier = Modifier.width(10.dp))
-
-                        // Botón para agregar más Box
-                        NavigationItem(
-                            icon = painterResource(id = R.drawable.baseline_add_box_24),
-                            selected = true,
-                            modifier = Modifier.clickable {
-                                boxStateManager.addBoxState(BoxState(pasteLocalState = false, clipboardText = "Clipboard is empty"))
-                            }
+                    items(boxStateManager.boxStates.size) { index ->
+                        val state = boxStateManager.boxStates[index]
+                        DynamicBox(
+                            index = index, // Pasamos el índice aquí
+                            modifier = if (isPortrait)
+                                Modifier
+                                    .fillMaxWidth(0.8f)
+                                    .aspectRatio(0.5f)
+                            else Modifier
+                                .fillMaxHeight(0.8f)
+                                .aspectRatio(2f),
+                            colorTheme = colorTheme,
+                            clipboardManager = clipboardManager,
+                            state = state,
+                            onStateChange = { newState ->
+                                boxStateManager.updateBoxState(index, newState)
+                            },
+                            coroutineScope = coroutineScope,
+                            scrollState = scrollState,
+                            boxStateManager = boxStateManager
                         )
-                    }
-                }
-            } else {
-                Box(
-                    modifier = Modifier
-                        .padding(top = 10.dp)
-                        .horizontalScroll(scrollState),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start,
-                        modifier = Modifier.pointerInput(Unit) {
-                            detectDragGestures { change, dragAmount ->
-                                change.consume()
-                                coroutineScope.launch {
-                                    scrollState.scrollBy(0f)
-                                }
-                            }
-                        }
-                    ) {
-                        boxStateManager.boxStates.forEachIndexed { index, state ->
-                            DynamicBox(
-                                index = index, // Pasamos el índice aquí
-                                modifier = if (isPortrait)
-                                    Modifier
-                                        .fillMaxWidth(0.8f)
-                                        .aspectRatio(0.5f)
-                                else Modifier
-                                    .fillMaxHeight(0.8f)
-                                    .aspectRatio(2f),
-                                colorTheme = colorTheme,
-                                clipboardManager = clipboardManager,
-                                state = state,
-                                onStateChange = { newState ->
-                                    boxStateManager.updateBoxState(index, newState)
-                                },
-                                coroutineScope = coroutineScope,
-                                scrollState = scrollState,
-                                boxStateManager = boxStateManager
-                            )
-                            Spacer(modifier = Modifier.width(10.dp))
-                        }
-
                         Spacer(modifier = Modifier.width(10.dp))
+                    }
 
-                        // Botón para agregar más Box
+                    item {
+                        Spacer(modifier = Modifier.width(10.dp))
                         NavigationItem(
                             icon = painterResource(id = R.drawable.baseline_add_box_24),
                             selected = true,
                             modifier = Modifier.clickable {
-                                boxStateManager.addBoxState(BoxState(pasteLocalState = false, clipboardText = "Clipboard is empty"))
+                                boxStateManager.addBoxState(
+                                    BoxState(
+                                        pasteLocalState = false,
+                                        clipboardText = "Clipboard is empty"
+                                    )
+                                )
                             }
                         )
                     }
                 }
             }
 
-
             Spacer(modifier = Modifier.height(10.dp))
-            // Espacio para arrastrar y mover el Row
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -494,7 +443,11 @@ fun HandleEditorCode(
                         detectDragGestures { change, dragAmount ->
                             change.consume()
                             coroutineScope.launch {
-                                scrollState.scrollBy(-1.5f * dragAmount.x)
+                                scrollState.scrollBy(
+                                    (dragAmount.x * -1.5f)
+                                        .toInt()
+                                        .toFloat()
+                                )
                             }
                         }
                     },
@@ -519,6 +472,9 @@ fun HandleEditorCode(
     }
 }
 
+
+
+
 @Composable
 fun DynamicBox(
     index: Int,
@@ -528,145 +484,273 @@ fun DynamicBox(
     state: BoxState,
     onStateChange: (BoxState) -> Unit,
     coroutineScope: CoroutineScope,
-    scrollState: ScrollState,
+    scrollState: LazyListState,
     boxStateManager: BoxStateManager
 ) {
     var seeListServer by remember { mutableStateOf(false) }
-    Box(
-        modifier = modifier
-            .border(5.dp, color = colorTheme, shape = RoundedCornerShape(25.dp)),
-        contentAlignment = Alignment.Center
-    ) {
-        if (!state.pasteLocalState) {
-            Column (
-                modifier = Modifier.fillMaxSize()
-                    ,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
+    var editBox by remember { mutableStateOf(false) }
+    var takeBox by remember { mutableStateOf(false) }
+    val colorEdit = Color(0xFF009688)
+    val appliedColorTheme = if (editBox) colorEdit else colorTheme
+    Column{
+        Box(
+            modifier = modifier
+                .border(5.dp, color = appliedColorTheme, shape = RoundedCornerShape(25.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            if (!state.pasteLocalState) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Button(
                         onClick = {
-                            val newState = state.copy(pasteLocalState = true)
-                            val clipData: ClipData? = clipboardManager.primaryClip
-                            val updatedClipboardText = if (clipData != null && clipData.itemCount > 0) {
-                                clipData.getItemAt(0).text.toString()
-                            } else {
-                                "Clipboard is empty"
-                            }
-                            onStateChange(newState.copy(clipboardText = updatedClipboardText))
+                            boxStateManager.removeBoxState(index)
                         },
                         shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(colorTheme.copy(0.8f)),
+                        colors = ButtonDefaults.buttonColors(appliedColorTheme.copy(0.8f)),
                         modifier = Modifier.size(100.dp)
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.ic_paste),
+                            painter = painterResource(id = R.drawable.ic_delete),
                             contentDescription = "",
                             modifier = Modifier
                                 .size(80.dp)
                                 .padding(8.dp)
                         )
                     }
-
-                    Spacer(modifier = Modifier.width(5.dp))
-
-                    Button(
-                        onClick = {
-                            seeListServer = !seeListServer
-                        },
-                        shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(colorTheme.copy(0.8f)),
-                        modifier = Modifier.size(100.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_computer),
-                            contentDescription = "",
-                            modifier = Modifier
-                                .size(80.dp)
-                                .padding(8.dp)
-                        )
-                    }
-                }
-                if (seeListServer) {
-                    LazyRow (
+                    Row(
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = 5.dp)
-
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-
-                        Server.messag.toList().forEach { message ->
-                            item {
-                                Button(
-                                    onClick = {
-                                        val newState = state.copy(pasteLocalState = true)
-                                        onStateChange(newState.copy(clipboardText = message))
-                                    },
-                                    shape = RoundedCornerShape(10.dp),
-                                    colors = ButtonDefaults.buttonColors(colorTheme.copy(0.8f)),
-                                    modifier = Modifier.size(100.dp)
-                                ) {
-                                    Text(
-                                        text = message,
-                                        color = Color.White,
-                                        overflow = TextOverflow.Ellipsis,
-                                        maxLines = 1
-                                    )
+                        Button(
+                            onClick = {
+                                val newState = state.copy(pasteLocalState = true)
+                                val clipData: ClipData? = clipboardManager.primaryClip
+                                val updatedClipboardText = if (clipData != null && clipData.itemCount > 0) {
+                                    clipData.getItemAt(0).text.toString()
+                                } else {
+                                    "Clipboard is empty"
                                 }
-                                Spacer(modifier = Modifier.width(5.dp))
+                                onStateChange(newState.copy(clipboardText = updatedClipboardText))
+                            },
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(appliedColorTheme.copy(0.8f)),
+                            modifier = Modifier.size(100.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_paste),
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .size(80.dp)
+                                    .padding(8.dp)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.width(5.dp))
+
+                        Button(
+                            onClick = {
+                                seeListServer = !seeListServer
+                            },
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(appliedColorTheme.copy(0.8f)),
+                            modifier = Modifier.size(100.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_computer),
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .size(80.dp)
+                                    .padding(8.dp)
+                            )
+                        }
+                    }
+                    if (seeListServer) {
+                        LazyRow(
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = 5.dp)
+                        ) {
+                            Server.messag.toList().forEach { message ->
+                                item {
+                                    Button(
+                                        onClick = {
+                                            val newState = state.copy(pasteLocalState = true)
+                                            onStateChange(newState.copy(clipboardText = message))
+                                        },
+                                        shape = RoundedCornerShape(10.dp),
+                                        colors = ButtonDefaults.buttonColors(appliedColorTheme.copy(0.8f)),
+                                        modifier = Modifier.size(100.dp)
+                                    ) {
+                                        Text(
+                                            text = message,
+                                            color = Color.White,
+                                            overflow = TextOverflow.Ellipsis,
+                                            maxLines = 1
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                }
                             }
                         }
                     }
                 }
+            } else {
+                Column{
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
 
+                    ){
+                        Row(
+                            modifier = Modifier
+                                .padding(2.dp)
+                                .height(45.dp)
+                                .background(
+                                    appliedColorTheme.copy(1f),
+                                    shape = RoundedCornerShape(20.dp)
+                                ),
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_compare_arrows_24),
+                                contentDescription = "",
+                                tint = Color.White
+                            )
+                            Checkbox(
+                                checked = state.isChecked,
+                                onCheckedChange = { isChecked ->
+                                    val newState = state.copy(isChecked = isChecked)
+                                    onStateChange(newState)
+                                    boxStateManager.updateBoxState(index, newState)
+                                },
+                                colors = CheckboxDefaults.colors(
+                                    checkedColor = appliedColorTheme.copy(1f),
+                                    uncheckedColor = Color.White
+                                )
+                            )
+                        }
 
-            }
-
-        } else {
-            Column(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Button(
-                        onClick = {
-                            onStateChange(state.copy(pasteLocalState = false, clipboardText = "", isChecked = false))
-                        },
-                        modifier = Modifier.padding(2.dp),
-                        colors = ButtonDefaults.buttonColors(colorTheme.copy(0.4f))
-                    ) {
-                        Text("Clean", color = Color.White)
+                        Spacer(modifier = Modifier.weight(1f))
+                        Row (
+                            modifier = Modifier
+                            .horizontalScroll(rememberScrollState()),
+                        ){
+                            Row(
+                                modifier = Modifier
+                                    .height(45.dp)
+                                    .background(
+                                        appliedColorTheme.copy(0.5f),
+                                        shape = RoundedCornerShape(10.dp)
+                                    ),
+                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.baseline_edit_note_24),
+                                    contentDescription = "",
+                                    tint = Color.White
+                                )
+                                Checkbox(
+                                    checked = editBox,
+                                    onCheckedChange = { isChecked ->
+                                        editBox = isChecked
+                                    },
+                                    colors = CheckboxDefaults.colors(
+                                        checkedColor = appliedColorTheme.copy(1f),
+                                        uncheckedColor = Color.White
+                                    )
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(5.dp))
+                            Row(
+                                modifier = Modifier
+                                    .height(45.dp)
+                                    .background(
+                                        appliedColorTheme.copy(0.5f),
+                                        shape = RoundedCornerShape(10.dp)
+                                    ),
+                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.baseline_list_alt_24),
+                                    contentDescription = "",
+                                    tint = Color.White
+                                )
+                                Checkbox(
+                                    checked = takeBox,
+                                    onCheckedChange = { isChecked ->
+                                        takeBox = isChecked
+                                    },
+                                    colors = CheckboxDefaults.colors(
+                                        checkedColor = appliedColorTheme.copy(1f),
+                                        uncheckedColor = Color.White
+                                    )
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(2.dp))
+                            Button(
+                                onClick = {
+                                    clipboardManager.setPrimaryClip(ClipData.newPlainText("Code", state.clipboardText))
+                                },
+                                modifier = Modifier.padding(2.dp),
+                                shape = RoundedCornerShape(10.dp),
+                                colors = ButtonDefaults.buttonColors(appliedColorTheme.copy(0.5f))
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.baseline_copy_all_24),
+                                    contentDescription = "",
+                                    tint = Color.White
+                                )
+                            }
+                            Button(
+                                onClick = {
+                                    onStateChange(state.copy(pasteLocalState = false, clipboardText = "", isChecked = false))
+                                },
+                                modifier = Modifier.padding(2.dp),
+                                shape = RoundedCornerShape(10.dp),
+                                colors = ButtonDefaults.buttonColors(appliedColorTheme.copy(0.5f))
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.baseline_layers_clear_24),
+                                    contentDescription = "",
+                                    tint = Color.White
+                                )
+                            }
+                        }
                     }
-                    Spacer(modifier = Modifier.weight(1f))
-                    Checkbox(
-                        checked = state.isChecked,
-                        onCheckedChange = { isChecked ->
-                            val newState = state.copy(isChecked = isChecked)
-                            onStateChange(newState)
-                            boxStateManager.updateBoxState(index, newState) // Usamos el índice aquí
-                        },
-                        colors = CheckboxDefaults.colors(
-                            checkedColor = colorTheme.copy(1f),
-                            uncheckedColor = Color.White
-                        )
-                    )
-                }
+                    if (takeBox) {
+                        TaskList(colorTheme)
+                    }
 
-                DisplayCodeEditor(
-                    fullCode = state.clipboardText,
-                    coroutineScope = coroutineScope,
-                    scrollState = scrollState
-                )
+                    if (editBox) {
+                        DisplayCodeEditorEdit(
+                            fullCode = state.clipboardText,
+                            coroutineScope = coroutineScope,
+                            scrollState = scrollState,
+                            editBox
+                        )
+                    } else {
+                        DisplayCodeEditor(
+                            fullCode = state.clipboardText,
+                            coroutineScope = coroutineScope,
+                            scrollState = scrollState
+                        )
+                    }
+                }
             }
         }
+
     }
 }
+
+
+
+
 
 fun getDeleteBlock(text1: String, text2: String): List<Pair<Int, String>> {
     val lines1 = text1.split("\n")
