@@ -1,5 +1,7 @@
 package com.xyz.codereview.Vista.Scene1.Base
 
+import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,6 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -18,25 +21,106 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.xyz.codereview.Vista.Scene1.Screen
+import androidx.compose.ui.unit.sp
+import com.xyz.codereview.Controlador.SettingsState
+import com.xyz.codereview.R
+
+
+
+enum class Scenes(){
+    Scene1,
+    Scene2
+}
+enum class Screen(
+    val typeScene: Scenes,
+    val category : Int,
+    val nameScreen : String
+) {
+    Home(Scenes.Scene1,0,"Home"),
+    QuickCode(Scenes.Scene1,0,"Quick Code"),
+    Settings(Scenes.Scene1,0,"Settings"),
+    GeneralSettings(Scenes.Scene1,1,"General"),
+    Legal(Scenes.Scene1,1,"Legal"),
+    EditorPrincipal(Scenes.Scene2,0,"Editor Principal"),
+}
+
+data class NavigationItem(val title: Int, val icon: Int, val screen: Screen)
+
+@Composable
+fun SootheNavigationBar(modifier: Modifier = Modifier) {
+    val items = listOf(
+        NavigationItem(R.string.navHome_name, R.drawable.ic_home, Screen.Home),
+        NavigationItem(R.string.navQuickCode_name, R.drawable.baseline_add_box_24, Screen.QuickCode),
+        NavigationItem(R.string.navSetting_name, R.drawable.ic_ajustes, Screen.Settings),
+    )
+    NavigationBar(
+        containerColor = Color.Black,
+        modifier = modifier
+    ) {
+        items.forEach { item ->
+            NavigationBarItem(
+                icon = {
+                    Image(
+                        painter = painterResource(id = item.icon),
+                        contentDescription = stringResource(id = item.title),
+                        modifier = Modifier
+                            .height(30.dp)
+                            .width(30.dp)
+                    )
+                },
+                label = {
+                    Text(
+                        text = stringResource(id = item.title),
+                        style = TextStyle(
+                            fontSize = 10.sp,
+                            color = if (SettingsState.selectedScreen == item.screen) Color.White else Color.White.copy(alpha = 0.7f)
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
+                selected = SettingsState.selectedScreen == item.screen,
+                onClick = {
+//                    if (item.screen != Screen.Code) {
+//                        lastSelectedScreen = SettingsState.selectedScreen // Guardar el ítem anteriormente seleccionado
+//                        SettingsState.selectedScreen = item.screen // Actualiza el ítem actual
+//                    } else {
+//                        // Cuando Screen.Code es seleccionado, no actualizamos lastSelectedScreen ni selectedScreen
+//                        // pero podemos manejar cualquier lógica adicional necesaria aquí.
+//                    }
+                    SettingsState.selectedScreen = item.screen
+                    Log.d("Screen", item.screen.nameScreen)
+                }
+            )
+        }
+    }
+}
 
 @Composable
 fun HeadContent(
     backgroundColor: Color = MaterialTheme.colorScheme.background,
     textColor: Color = MaterialTheme.colorScheme.onBackground,
-    screenPrincipal: Screen,
-    subScreenPrincipal: Screen
+    screenPrincipal: Screen
 ) {
-    val paddingBlock: Int = 10
     val spaceTitleContent: Int = 20
     Column(
         modifier = Modifier
@@ -50,33 +134,6 @@ fun HeadContent(
             color = textColor,
             modifier = Modifier.padding(bottom = spaceTitleContent.dp)
         )
-        when(subScreenPrincipal){
-
-            //Screen.Projects -> SearchBar()
-
-            Screen.QuickCode,
-            Screen.GeneralSettings,
-            Screen.LanguageSettings,
-            Screen.BuildingInstructions,
-            Screen.Legal -> {}
-
-            else -> {}
-        }
-    }
-}
-
-@Composable
-fun SearchBar(){
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.DarkGray, RoundedCornerShape(8.dp))
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(Icons.Default.Search, contentDescription = null, tint = Color.White)
-        Spacer(modifier = Modifier.width(8.dp))
-        Text("Buscar", color = Color.White)
     }
 }
 @Composable
@@ -89,10 +146,10 @@ fun CloseBar(
     val paddingItem: Int = 16
     val sizeButton: Int = 30 // Tamaño del botón circular
     val sizeIconItem: Int = 24 // Tamaño del ícono
-    Surface (
+    Surface(
         color = Color(0x4D7F7F7F),
         shape = RoundedCornerShape(8.dp),
-    ){
+    ) {
         Row(
             modifier = Modifier.padding(paddingItem.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -125,10 +182,17 @@ fun CloseBar(
             }
         }
     }
-
 }
 @Preview
 @Composable
+private fun SootheBottomNavigationPreview() {
+
+    SootheNavigationBar()
+
+}
+
+@Preview
+@Composable
 fun HeadContentPreview() {
-    CloseBar(Icons.Default.KeyboardArrowLeft, Screen.GeneralSettings.toString(),{},Color.White)
+
 }

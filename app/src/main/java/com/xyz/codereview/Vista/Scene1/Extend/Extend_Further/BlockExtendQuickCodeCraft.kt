@@ -60,7 +60,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.xyz.codereview.Vista.Scene1.Screen
+
 import com.wakaztahir.codeeditor.model.CodeLang
 import com.wakaztahir.codeeditor.theme.CodeThemeType
 import com.xyz.codereview.Modelo.BoxStateManagerSingleton
@@ -68,6 +68,7 @@ import com.xyz.codereview.Modelo.Element
 import com.xyz.codereview.Modelo.GameViewModel
 import com.xyz.codereview.R
 import com.xyz.codereview.Controlador.SettingsState
+import com.xyz.codereview.Vista.Scene1.Base.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

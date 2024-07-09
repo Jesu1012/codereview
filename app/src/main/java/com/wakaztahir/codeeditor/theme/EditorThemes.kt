@@ -81,13 +81,13 @@ class MidnightCherryTheme : CodeTheme(
         comment = Color(0xFF808080), // Gray with 70% opacity
         string = Color(0xFFF8BBD0), // Pink with 70% opacity
         punctuation = Color(0xFF555555), // Dark gray with 50% opacity
-        plain = Color(0xFF222222), // Dark background
+        plain = Color(0xFFF5F5F5), // Dark background
         tag = Color(0xFFE74C3C), // Red with 70% opacity
         declaration = Color(0xFFC0392B), // Dark red with 70% opacity
-        source = Color(0xFF222222), // Dark background
+        source = Color(0xFFF5F5F5), // Dark background
         attrName = Color(0xFFE74C3C), // Red with 70% opacity
         attrValue = Color(0xFFF8BBD0), // Pink with 70% opacity
-        nocode = Color(0xFF222222), // Dark background
+        nocode = Color(0xFFF5F5F5), // Dark background
     )
 )
 

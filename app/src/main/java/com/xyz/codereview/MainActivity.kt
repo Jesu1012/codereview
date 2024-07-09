@@ -31,7 +31,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.firebase.database.FirebaseDatabase
 import com.xyz.codereview.Controlador.SettingsState
 import com.xyz.codereview.Modelo.GameViewModel
-import com.xyz.codereview.Vista.Scene1.MySootheApp
+import com.xyz.codereview.Vista.MySootheApp
 import com.xyz.codereview.ui.theme.CodereviewTheme
 import kotlinx.coroutines.launch
 

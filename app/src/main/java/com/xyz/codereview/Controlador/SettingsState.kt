@@ -4,14 +4,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
-import com.xyz.codereview.Vista.Scene1.Screen
+
 import com.wakaztahir.codeeditor.model.CodeLang
 import com.wakaztahir.codeeditor.theme.CodeThemeType
 import com.xyz.codereview.Modelo.Element
+import com.xyz.codereview.Vista.Scene1.Base.*
 
 object SettingsState {
     var usuarioCurrent by mutableStateOf<UsuarioC?>(null)
-    var selectedScreen by mutableStateOf<Screen>(Screen.Home)
+    var selectedScreen by mutableStateOf<Screen>(Screen.QuickCode)
     var selectedLanguage: CodeLang = CodeLang.Default
     var selectedTheme: CodeThemeType = CodeThemeType.Default
     var elementSelect: Element? = null

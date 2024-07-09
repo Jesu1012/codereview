@@ -1,4 +1,4 @@
-package com.xyz.codereview.Vista.Scene1
+package com.xyz.codereview.Vista
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -49,6 +49,7 @@ import com.xyz.codereview.Modelo.GameViewModel
 import com.xyz.codereview.R
 import com.xyz.codereview.Controlador.SettingsState
 import com.xyz.codereview.Vista.Scene1.Base.HeadContent
+import com.xyz.codereview.Vista.Scene1.Base.*
 import com.xyz.codereview.Vista.Scene1.Extend.Extend_Further.BlockConnection
 import com.xyz.codereview.Vista.Scene1.Extend.*
 import com.xyz.codereview.Vista.Scene2.Editor.BlockHandleEditorCode
@@ -220,8 +221,6 @@ fun Drawer(width: Dp) {
         }
     }
 }
-
-
 
 @Composable
 fun AccountSection(
@@ -410,7 +409,7 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
                         .background(Color.Black)
                         .padding(top = 20.dp, start = 10.dp),
                     bottomBar = {
-                        SootheNavigationBar( )
+                        SootheNavigationBar()
                     }
                 ) { padding ->
 
@@ -420,32 +419,28 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
                             .padding(padding)
                             .background(Color.Black)
                     ){
-                        Column()
-                        {
+                        Column{
                             if (currentScreen.category == 0){
                                 Row {
                                     IconButton(onClick = { setDrawerOpen(true) }, modifier = Modifier.size(32.dp)) {
                                         Icon(Icons.Filled.Menu, contentDescription = "Menu", tint = Color.White, modifier = Modifier.fillMaxSize())
                                     }
                                     Spacer(modifier = Modifier.width(10.dp))
-                                    HeadContent(Color.Black, Color.White, currentScreen, currentScreen)
+                                    HeadContent(Color.Black, Color.White, currentScreen)
                                 }
                             }else{
-                                HeadContent(Color.Black, Color.White, Screen.Settings, currentScreen)
+                                HeadContent(Color.Black, Color.White, Screen.Settings)
                             }
 
 
                         }
-                        Column (){
+                        Column{
 
                             when (currentScreen) {
                                 Screen.Home -> BlockHome()
-                                //Screen.Projects -> BlockProjects()
                                 Screen.QuickCode -> BlockQuickCode(orientation,viewModel,padding)
                                 Screen.Settings,
                                 Screen.GeneralSettings,
-                                Screen.LanguageSettings,
-                                Screen.BuildingInstructions,
                                 Screen.Legal -> BlockSettings(
                                     currentScreen
                                 )
@@ -466,30 +461,23 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
                         .background(Color.Black)
                         .padding(top = 20.dp, start = 10.dp),
                 ) { padding ->
-
                     Column (
                         Modifier
                             .fillMaxSize()
                             .background(Color.Black)
                     ){
-
-                        if (currentScreen.category == 0){
-                            Row {
-                                IconButton(onClick = { setDrawerOpen(true) },colors = IconButtonColors(
-                                    SettingsState.selectedTheme.color.copy(0.5f), Color.White, Color.White, Color.White), modifier = Modifier.size(50.dp)) {
-                                    Icon(Icons.Filled.Menu, contentDescription = "Menu", tint = Color.White, modifier = Modifier.fillMaxSize())
-                                }
-                                Spacer(modifier = Modifier.width(10.dp))
-                                IconButton(onClick = {
-                                    SettingsState.selectedScreen = Screen.QuickCode
-
-                                },colors = IconButtonColors(SettingsState.selectedTheme.color, Color.White, Color.White, Color.White), modifier = Modifier.size(50.dp)) {
-                                    Image(painter = painterResource(id = R.drawable.ic_home), contentDescription = "")
-                                }
+                        Row {
+                            IconButton(onClick = { setDrawerOpen(true) },colors = IconButtonColors(
+                                SettingsState.selectedTheme.color.copy(0.5f), Color.White, Color.White, Color.White), modifier = Modifier.size(50.dp)) {
+                                Icon(Icons.Filled.Menu, contentDescription = "Menu", tint = Color.White, modifier = Modifier.fillMaxSize())
                             }
+                            Spacer(modifier = Modifier.width(10.dp))
+                            IconButton(onClick = {
+                                SettingsState.selectedScreen = Screen.QuickCode
 
-                        }else{
-                            HeadContent(Color.Black, Color.White, Screen.Settings, currentScreen)
+                            },colors = IconButtonColors(SettingsState.selectedTheme.color, Color.White, Color.White, Color.White), modifier = Modifier.size(50.dp)) {
+                                Image(painter = painterResource(id = R.drawable.ic_home), contentDescription = "")
+                            }
                         }
 
                         when (currentScreen) {
@@ -506,8 +494,6 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
                 }
 
             }
-
-
         }
     }
 }

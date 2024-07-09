@@ -28,9 +28,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xyz.codereview.Controlador.SettingsState
-import com.xyz.codereview.Vista.Scene1.Base.CloseBar
+import com.xyz.codereview.Vista.Scene1.Base.*
 import com.xyz.codereview.Vista.Scene1.Extend.Extend_Further.*
-import com.xyz.codereview.Vista.Scene1.Screen
+
 
 
 @Composable
@@ -54,8 +54,6 @@ fun BlockSettings(screen: Screen) {
         when (screen) {
             Screen.Settings -> ContentSettings()
             Screen.GeneralSettings -> ContentGeneralScreen()
-            Screen.LanguageSettings -> ContentLanguageScreen()
-            Screen.BuildingInstructions -> ContentInstructionsScreen()
             Screen.Legal -> ContentLegalScreen()
             else -> {}
         }

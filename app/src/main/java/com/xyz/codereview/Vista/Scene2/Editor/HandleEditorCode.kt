@@ -58,18 +58,22 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import com.github.difflib.DiffUtils
 import com.github.difflib.patch.DeltaType
+import com.wakaztahir.codeeditor.theme.CodeTheme
+import com.wakaztahir.codeeditor.theme.CodeThemeType
 import com.xyz.codereview.Modelo.BoxState
 import com.xyz.codereview.Modelo.BoxStateManager
 import com.xyz.codereview.Modelo.BoxStateManagerSingleton
 import com.xyz.codereview.Modelo.Server
 import com.xyz.codereview.R
 import com.xyz.codereview.Controlador.SettingsState
+import com.xyz.codereview.Modelo.Element
 import com.xyz.codereview.Vista.Scene1.Extend.Extend_Further.NavigationItem
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -87,10 +91,14 @@ fun BlockHandleEditorCode(
     var splitterOffset by remember { mutableStateOf(1f) }
     val animatedSplitterOffset by animateFloatAsState(targetValue = splitterOffset)
     val minHeight = 100.dp
-    val boxStateManager = remember { BoxStateManagerSingleton.getInstance(SettingsState.elementSelect!!)}
+    val boxStateManager = remember { BoxStateManagerSingleton.getInstance(SettingsState.elementSelect?:Element(
+        name = "Elemento",
+        color = Color(0xFFE74C3C),
+        type = "")
+    )}
 
     BoxWithConstraints(modifier = modifier
-        .padding(end = 20.dp)
+        .padding(end = 10.dp)
         .fillMaxSize()) {
         val totalHeight = maxHeight
         val totalWidth = maxWidth
@@ -158,7 +166,8 @@ fun BlockHandleEditorCode(
                                 onDeleteBlockChange = { newDeleteBlock ->
                                     deleteBlock = newDeleteBlock
                                 },
-                                boxStateManager = boxStateManager
+                                boxStateManager = boxStateManager,
+                                orientation = orientation
 
                             )
                         } else {
@@ -244,7 +253,7 @@ fun BlockHandleEditorCode(
                     Box(
                         modifier = Modifier
                             .weight(animatedSplitterOffset)
-                            .fillMaxHeight()
+                            .fillMaxSize()
                             .background(Color.Black, shape = RoundedCornerShape(5.dp))
                     ) {
                         if (animatedSplitterOffset > 0.7f) {
@@ -258,7 +267,8 @@ fun BlockHandleEditorCode(
                                 onDeleteBlockChange = { newDeleteBlock ->
                                     deleteBlock = newDeleteBlock
                                 },
-                                boxStateManager = boxStateManager
+                                boxStateManager = boxStateManager,
+                                orientation = orientation
                             )
                         } else {
                             CircularProgressIndicator()
@@ -349,7 +359,8 @@ fun HandleEditorCode(
     onChange: () -> Unit,
     onCodeChange: (String) -> Unit,
     onDeleteBlockChange: (List<Pair<Int, String>>) -> Unit,
-    boxStateManager: BoxStateManager
+    boxStateManager: BoxStateManager,
+    orientation: Int
 ) {
     val clipboardManager: ClipboardManager = LocalContext.current.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val configuration = LocalConfiguration.current
@@ -360,60 +371,118 @@ fun HandleEditorCode(
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = modifier.fillMaxSize()) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(top = 10.dp)
-                    .horizontalScroll(scrollState),
-                contentAlignment = Alignment.CenterStart
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start,
-                    modifier = Modifier.pointerInput(Unit) {
-                        detectDragGestures { change, dragAmount ->
-                            change.consume()
-                            coroutineScope.launch {
-                                scrollState.scrollBy(0f)
+            if (orientation == 0) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(top = 10.dp)
+                        .horizontalScroll(scrollState),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start,
+                        modifier = Modifier.pointerInput(Unit) {
+                            detectDragGestures { change, dragAmount ->
+                                change.consume()
+                                coroutineScope.launch {
+                                    scrollState.scrollBy(0f)
+                                }
                             }
                         }
-                    }
-                ) {
-                    boxStateManager.boxStates.forEachIndexed { index, state ->
-                        DynamicBox(
-                            index = index, // Pasamos el índice aquí
-                            modifier = if (isPortrait)
-                                Modifier
-                                    .fillMaxWidth(0.8f)
-                                    .aspectRatio(0.5f)
-                            else Modifier
-                                .fillMaxHeight(0.8f)
-                                .aspectRatio(2f),
-                            colorTheme = colorTheme,
-                            clipboardManager = clipboardManager,
-                            state = state,
-                            onStateChange = { newState ->
-                                boxStateManager.updateBoxState(index, newState)
-                            },
-                            coroutineScope = coroutineScope,
-                            scrollState = scrollState,
-                            boxStateManager = boxStateManager
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                    }
-
-                    Spacer(modifier = Modifier.width(10.dp))
-
-                    // Botón para agregar más Box
-                    NavigationItem(
-                        icon = painterResource(id = R.drawable.baseline_add_box_24),
-                        selected = true,
-                        modifier = Modifier.clickable {
-                            boxStateManager.addBoxState(BoxState(pasteLocalState = false, clipboardText = "Clipboard is empty"))
+                    ) {
+                        boxStateManager.boxStates.forEachIndexed { index, state ->
+                            DynamicBox(
+                                index = index, // Pasamos el índice aquí
+                                modifier = if (isPortrait)
+                                    Modifier
+                                        .fillMaxWidth(0.8f)
+                                        .aspectRatio(0.5f)
+                                else Modifier
+                                    .fillMaxHeight(0.8f)
+                                    .aspectRatio(2f),
+                                colorTheme = colorTheme,
+                                clipboardManager = clipboardManager,
+                                state = state,
+                                onStateChange = { newState ->
+                                    boxStateManager.updateBoxState(index, newState)
+                                },
+                                coroutineScope = coroutineScope,
+                                scrollState = scrollState,
+                                boxStateManager = boxStateManager
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
                         }
-                    )
+
+                        Spacer(modifier = Modifier.width(10.dp))
+
+                        // Botón para agregar más Box
+                        NavigationItem(
+                            icon = painterResource(id = R.drawable.baseline_add_box_24),
+                            selected = true,
+                            modifier = Modifier.clickable {
+                                boxStateManager.addBoxState(BoxState(pasteLocalState = false, clipboardText = "Clipboard is empty"))
+                            }
+                        )
+                    }
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .horizontalScroll(scrollState),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start,
+                        modifier = Modifier.pointerInput(Unit) {
+                            detectDragGestures { change, dragAmount ->
+                                change.consume()
+                                coroutineScope.launch {
+                                    scrollState.scrollBy(0f)
+                                }
+                            }
+                        }
+                    ) {
+                        boxStateManager.boxStates.forEachIndexed { index, state ->
+                            DynamicBox(
+                                index = index, // Pasamos el índice aquí
+                                modifier = if (isPortrait)
+                                    Modifier
+                                        .fillMaxWidth(0.8f)
+                                        .aspectRatio(0.5f)
+                                else Modifier
+                                    .fillMaxHeight(0.8f)
+                                    .aspectRatio(2f),
+                                colorTheme = colorTheme,
+                                clipboardManager = clipboardManager,
+                                state = state,
+                                onStateChange = { newState ->
+                                    boxStateManager.updateBoxState(index, newState)
+                                },
+                                coroutineScope = coroutineScope,
+                                scrollState = scrollState,
+                                boxStateManager = boxStateManager
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                        }
+
+                        Spacer(modifier = Modifier.width(10.dp))
+
+                        // Botón para agregar más Box
+                        NavigationItem(
+                            icon = painterResource(id = R.drawable.baseline_add_box_24),
+                            selected = true,
+                            modifier = Modifier.clickable {
+                                boxStateManager.addBoxState(BoxState(pasteLocalState = false, clipboardText = "Clipboard is empty"))
+                            }
+                        )
+                    }
                 }
             }
+
+
             Spacer(modifier = Modifier.height(10.dp))
             // Espacio para arrastrar y mover el Row
             Box(
@@ -617,3 +686,20 @@ fun getDeleteBlock(text1: String, text2: String): List<Pair<Int, String>> {
 }
 
 
+@Preview
+@Composable
+fun PreviewBlockHandleEditorCode() {
+    BlockHandleEditorCode(
+        modifier = Modifier.fillMaxSize(),
+        colorTheme = Color(0xFF27AE60),
+        1
+    )
+}
+@Preview
+@Composable
+fun PreviewBlockHandleEditorCodev2() {
+    BlockHandleEditorCode(
+        modifier = Modifier.fillMaxSize(),
+        colorTheme = Color(0xFF27AE60),
+    )
+}
