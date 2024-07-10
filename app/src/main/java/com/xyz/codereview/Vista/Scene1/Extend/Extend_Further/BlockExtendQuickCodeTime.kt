@@ -18,45 +18,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.xyz.codereview.Modelo.PomodoroState
 import kotlinx.coroutines.delay
 
-object PomodoroState {
-    var isRunning by mutableStateOf(false)
-    var timeLeft by mutableStateOf(25 * 60) // 25 minutes in seconds
-    var currentPomodoro by mutableStateOf(1)
-    var currentStage by mutableStateOf("Concentración")
 
-    fun reset() {
-        isRunning = false
-        timeLeft = 25 * 60
-        currentPomodoro = 1
-        currentStage = "Concentración"
-    }
-
-    fun nextStage(context: Context) {
-        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
-        when (currentStage) {
-            "Concentración" -> {
-                if (currentPomodoro < 4) {
-                    currentStage = "Pausa Corta"
-                    timeLeft = 5 * 60 // 5 minutes break
-                } else {
-                    currentStage = "Pausa Larga"
-                    timeLeft = 15 * 60 // 15 minutes long break
-                    //currentPomodoro = 0
-                }
-                vibrator.vibrate(500) // Vibrate for 500 milliseconds
-            }
-            "Pausa Corta", "Pausa Larga" -> {
-                currentStage = "Concentración"
-                timeLeft = 25 * 60 // 25 minutes work
-                currentPomodoro++
-                vibrator.vibrate(600)
-            }
-        }
-    }
-}
 
 @Composable
 fun Timer() {

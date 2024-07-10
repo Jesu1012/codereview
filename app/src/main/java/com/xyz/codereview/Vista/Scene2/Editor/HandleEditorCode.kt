@@ -75,6 +75,9 @@ import com.xyz.codereview.R
 import com.xyz.codereview.Controlador.SettingsState
 import com.xyz.codereview.Modelo.Element
 import com.xyz.codereview.Vista.Scene1.Extend.Extend_Further.NavigationItem
+import com.xyz.codereview.Vista.Scene2.Editor.Base.DisplayCodeEditor
+import com.xyz.codereview.Vista.Scene2.Editor.Base.DisplayCodeEditorEdit
+import com.xyz.codereview.Vista.Scene2.Editor.Base.DisplayCodeEditorView
 import com.xyz.codereview.Vista.Scene2.Editor.Extend.TaskList
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers

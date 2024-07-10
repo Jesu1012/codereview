@@ -68,16 +68,14 @@ import com.xyz.codereview.Modelo.Element
 import com.xyz.codereview.Modelo.GameViewModel
 import com.xyz.codereview.R
 import com.xyz.codereview.Controlador.SettingsState
-import com.xyz.codereview.Vista.Scene1.Base.Screen
+import com.xyz.codereview.Modelo.NavigationPanel
+import com.xyz.codereview.Modelo.Screen
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-enum class NavigationPanel {
-    NONE,
-    Language,
-    Theme
-}
+
 
 @Composable
 fun BlockCraft(viewModel: GameViewModel) {

@@ -52,11 +52,12 @@ import androidx.compose.ui.unit.sp
 import com.xyz.codereview.Modelo.GameViewModel
 import com.xyz.codereview.R
 import com.xyz.codereview.Controlador.SettingsState
+import com.xyz.codereview.Modelo.*
 import com.xyz.codereview.Vista.Scene1.Base.HeadContent
 import com.xyz.codereview.Vista.Scene1.Base.*
 import com.xyz.codereview.Vista.Scene1.Extend.Extend_Further.BlockConnection
 import com.xyz.codereview.Vista.Scene1.Extend.*
-import com.xyz.codereview.Vista.Scene1.Extend.Extend_Further.PomodoroState
+import com.xyz.codereview.Vista.Scene1.SootheNavigationBar
 import com.xyz.codereview.Vista.Scene2.Editor.BlockHandleEditorCode
 import kotlinx.coroutines.delay
 
@@ -469,7 +470,7 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
                 ) { padding ->
                     val context = LocalContext.current
 
-                    /*LaunchedEffect(PomodoroState.isRunning) {
+                    LaunchedEffect(PomodoroState.isRunning) {
                         while (PomodoroState.isRunning) {
                             while (PomodoroState.timeLeft > 0) {
                                 //delay(1000L)
@@ -478,7 +479,7 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
                             }
                             PomodoroState.nextStage(context)
                         }
-                    }*/
+                    }
                     Column (
                         Modifier
                             .fillMaxSize()
@@ -496,7 +497,7 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
                             },colors = IconButtonColors(SettingsState.selectedTheme.color, Color.White, Color.White, Color.White), modifier = Modifier.size(50.dp)) {
                                 Image(painter = painterResource(id = R.drawable.ic_home), contentDescription = "")
                             }
-                            /*if (PomodoroState.isRunning) {
+                            if (PomodoroState.isRunning) {
                                 Spacer(modifier = Modifier.weight(1f))
                                 val minutes = PomodoroState.timeLeft / 60
                                 val seconds = PomodoroState.timeLeft % 60
@@ -507,7 +508,7 @@ fun MainContentWithTopBar(currentScreen: Screen, isDrawerOpen: Boolean, setDrawe
                                     color = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.padding(16.dp)
                                 )
-                            }*/
+                            }
 
 
                         }

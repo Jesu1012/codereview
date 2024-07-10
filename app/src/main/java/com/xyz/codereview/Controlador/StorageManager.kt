@@ -6,7 +6,7 @@ import com.google.gson.reflect.TypeToken
 import com.xyz.codereview.Modelo.BoxState
 import com.xyz.codereview.Modelo.Element
 import java.io.File
-
+//Json
 object StorageManager {
     private const val FILE_NAME = "box_states.json"
 

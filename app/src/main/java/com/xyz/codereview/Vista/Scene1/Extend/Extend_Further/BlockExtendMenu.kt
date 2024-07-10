@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.xyz.codereview.Modelo.Server
+import com.xyz.codereview.Modelo.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -174,7 +174,7 @@ fun ServerUI(
         }
     }
 }
-enum class ConnectionStatus { None, Target, Port, Clients }
+
 @Composable
 fun CustomIPDisplay(value: String, connectionStatus: ConnectionStatus = ConnectionStatus.None) {
     var colorText = Color(0xFF009688)

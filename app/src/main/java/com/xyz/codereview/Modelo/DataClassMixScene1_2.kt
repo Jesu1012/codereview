@@ -1,6 +1,4 @@
 package com.xyz.codereview.Modelo
-
-
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -19,8 +17,7 @@ import android.content.Context
 import com.google.gson.annotations.SerializedName
 import com.xyz.codereview.Controlador.SettingsState
 import com.xyz.codereview.Controlador.StorageManager
-import com.xyz.codereview.Vista.Scene2.Editor.Extend.Task
-
+//Data class Scene 1 and Scene 2
 object BoxStateManagerSingleton {
     private val instances = mutableStateListOf<Pair<Element, BoxStateManager>>()
 
@@ -146,7 +143,10 @@ class BoxStateManager {
     }
 }
 
-
+data class Task(
+    @SerializedName("id") val id: String = UUID.randomUUID().toString(),
+    @SerializedName("content") val content: String
+)
 
 data class BoxState(
     @SerializedName("pasteLocalState") var pasteLocalState: Boolean,

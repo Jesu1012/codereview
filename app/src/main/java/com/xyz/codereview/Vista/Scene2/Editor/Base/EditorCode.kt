@@ -1,7 +1,6 @@
-package com.xyz.codereview.Vista.Scene2.Editor
+package com.xyz.codereview.Vista.Scene2.Editor.Base
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -26,11 +25,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,7 +40,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalDensity
@@ -61,6 +56,7 @@ import androidx.compose.ui.unit.sp
 import com.wakaztahir.codeeditor.prettify.PrettifyParser
 import com.wakaztahir.codeeditor.utils.parseCodeAsAnnotatedString
 import com.xyz.codereview.Controlador.SettingsState
+import com.xyz.codereview.Modelo.*
 import com.xyz.codereview.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -577,8 +573,7 @@ fun DisplayCodeEditorEdit(
     }
 }
 
-data class HighlightedLine(val line: Int, val color: Color)
-data class HighlightedRange(val start: Int, val end: Int, val color: Color)
+
 
 
 

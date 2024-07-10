@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import com.wakaztahir.codeeditor.model.CodeLang
 import com.wakaztahir.codeeditor.theme.CodeThemeType
 import com.xyz.codereview.Modelo.Element
+import com.xyz.codereview.Modelo.Screen
 import com.xyz.codereview.Vista.Scene1.Base.*
 
 object SettingsState {

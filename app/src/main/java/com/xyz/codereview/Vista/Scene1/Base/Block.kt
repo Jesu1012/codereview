@@ -42,78 +42,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xyz.codereview.Controlador.SettingsState
+import com.xyz.codereview.Modelo.Screen
 import com.xyz.codereview.R
 
 
 
-enum class Scenes(){
-    Scene1,
-    Scene2
-}
-enum class Screen(
-    val typeScene: Scenes,
-    val category : Int,
-    val nameScreen : String
-) {
-    Home(Scenes.Scene1,0,"Home"),
-    QuickCode(Scenes.Scene1,0,"Quick Code"),
-    Settings(Scenes.Scene1,0,"Settings"),
-    GeneralSettings(Scenes.Scene1,1,"General"),
-    Legal(Scenes.Scene1,1,"Legal"),
-    EditorPrincipal(Scenes.Scene2,0,"Editor Principal"),
-}
-
-data class NavigationItem(val title: Int, val icon: Int, val screen: Screen)
-
-@Composable
-fun SootheNavigationBar(modifier: Modifier = Modifier) {
-    val items = listOf(
-        NavigationItem(R.string.navHome_name, R.drawable.ic_home, Screen.Home),
-        NavigationItem(R.string.navQuickCode_name, R.drawable.baseline_add_box_24, Screen.QuickCode),
-        NavigationItem(R.string.navSetting_name, R.drawable.ic_ajustes, Screen.Settings),
-    )
-    NavigationBar(
-        containerColor = Color.Black,
-        modifier = modifier
-    ) {
-        items.forEach { item ->
-            NavigationBarItem(
-                icon = {
-                    Image(
-                        painter = painterResource(id = item.icon),
-                        contentDescription = stringResource(id = item.title),
-                        modifier = Modifier
-                            .height(30.dp)
-                            .width(30.dp)
-                    )
-                },
-                label = {
-                    Text(
-                        text = stringResource(id = item.title),
-                        style = TextStyle(
-                            fontSize = 10.sp,
-                            color = if (SettingsState.selectedScreen == item.screen) Color.White else Color.White.copy(alpha = 0.7f)
-                        ),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                selected = SettingsState.selectedScreen == item.screen,
-                onClick = {
-//                    if (item.screen != Screen.Code) {
-//                        lastSelectedScreen = SettingsState.selectedScreen // Guardar el ítem anteriormente seleccionado
-//                        SettingsState.selectedScreen = item.screen // Actualiza el ítem actual
-//                    } else {
-//                        // Cuando Screen.Code es seleccionado, no actualizamos lastSelectedScreen ni selectedScreen
-//                        // pero podemos manejar cualquier lógica adicional necesaria aquí.
-//                    }
-                    SettingsState.selectedScreen = item.screen
-                    Log.d("Screen", item.screen.nameScreen)
-                }
-            )
-        }
-    }
-}
 
 @Composable
 fun HeadContent(
@@ -183,13 +116,7 @@ fun CloseBar(
         }
     }
 }
-@Preview
-@Composable
-private fun SootheBottomNavigationPreview() {
 
-    SootheNavigationBar()
-
-}
 
 @Preview
 @Composable

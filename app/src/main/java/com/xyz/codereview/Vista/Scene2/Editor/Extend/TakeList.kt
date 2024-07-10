@@ -23,21 +23,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.gson.annotations.SerializedName
 import com.xyz.codereview.Modelo.BoxState
+import com.xyz.codereview.Modelo.Task
 import com.xyz.codereview.R
 import java.util.UUID
 
-/*data class BoxState(
-    @SerializedName("pasteLocalState") var pasteLocalState: Boolean,
-    @SerializedName("clipboardText") var clipboardText: String,
-    @SerializedName("isChecked") var isChecked: Boolean = false,
-    @SerializedName("listTasks") val listTasks: List<Task> = listOf(),
-    @SerializedName("listTasksCompleted") val listTasksCompleted: List<Task> = listOf()
-)*/
 
-data class Task(
-    @SerializedName("id") val id: String = UUID.randomUUID().toString(),
-    @SerializedName("content") val content: String
-)
+
+
 
 @Composable
 fun TaskList(boxState: BoxState, onStateChange: (BoxState) -> Unit, colorTheme: Color) {

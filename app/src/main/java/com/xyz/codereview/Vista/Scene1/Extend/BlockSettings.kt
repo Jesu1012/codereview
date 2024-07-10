@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xyz.codereview.Controlador.SettingsState
+import com.xyz.codereview.Modelo.Screen
 import com.xyz.codereview.Vista.Scene1.Base.*
 import com.xyz.codereview.Vista.Scene1.Extend.Extend_Further.*
 
