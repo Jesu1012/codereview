@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,10 +38,9 @@ fun BlockHome(
             shape = RoundedCornerShape(25.dp) // Mitad de la altura para redondear completamente las esquinas
         ) {
             Image(
-                painter = painterResource(id = R.drawable.cofe), // Ajusta el recurso de la imagen según tu archivo drawable
+                painter = painterResource(id = R.drawable.pomodoroimage), // Ajusta el recurso de la imagen según tu archivo drawable
                 contentDescription = "Example Icon",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.fillMaxSize()
+                contentScale = ContentScale.Fit
             )
         }
 
@@ -54,10 +54,9 @@ fun BlockHome(
             shape = RoundedCornerShape(25.dp) // Mitad de la altura para redondear completamente las esquinas
         ) {
             Image(
-                painter = painterResource(id = R.drawable.pc), // Ajusta el recurso de la imagen según tu archivo drawable
+                painter = painterResource(id = R.drawable.quickcodeshow), // Ajusta el recurso de la imagen según tu archivo drawable
                 contentDescription = "Example Icon",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.fillMaxSize()
+                contentScale = ContentScale.Crop,
             )
         }
 
@@ -67,11 +66,11 @@ fun BlockHome(
             modifier = Modifier
                 .fillMaxHeight()
                 .width(340.dp),
-            color = Color.Yellow,
+            color = Color.White,
             shape = RoundedCornerShape(25.dp) // Mitad de la altura para redondear completamente las esquinas
         ) {
             Image(
-                painter = painterResource(id = R.drawable.publicidad3), // Ajusta el recurso de la imagen según tu archivo drawable
+                painter = painterResource(id = R.drawable.icon512), // Ajusta el recurso de la imagen según tu archivo drawable
                 contentDescription = "Example Icon",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
