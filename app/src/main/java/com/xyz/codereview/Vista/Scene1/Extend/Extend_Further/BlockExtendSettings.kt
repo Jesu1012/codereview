@@ -215,7 +215,7 @@ fun ContentGeneralScreen() {
         )
         LanguageSelectionApp()
         Text(
-            text = "Tema de Programacion Preferida:",
+            text = "Preferred Programming Theme",
             color = Color.White,
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(bottom = 10.dp)

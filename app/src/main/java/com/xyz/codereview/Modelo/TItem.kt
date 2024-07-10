@@ -19,6 +19,7 @@ import android.content.Context
 import com.google.gson.annotations.SerializedName
 import com.xyz.codereview.Controlador.SettingsState
 import com.xyz.codereview.Controlador.StorageManager
+import com.xyz.codereview.Vista.Scene2.Editor.Extend.Task
 
 object BoxStateManagerSingleton {
     private val instances = mutableStateListOf<Pair<Element, BoxStateManager>>()
@@ -150,7 +151,9 @@ class BoxStateManager {
 data class BoxState(
     @SerializedName("pasteLocalState") var pasteLocalState: Boolean,
     @SerializedName("clipboardText") var clipboardText: String,
-    @SerializedName("isChecked") var isChecked: Boolean = false
+    @SerializedName("isChecked") var isChecked: Boolean = false,
+    @SerializedName("listTasks") val listTasks: List<Task> = listOf(),
+    @SerializedName("listTasksCompleted") val listTasksCompleted: List<Task> = listOf()
 )
 
 data class Element(

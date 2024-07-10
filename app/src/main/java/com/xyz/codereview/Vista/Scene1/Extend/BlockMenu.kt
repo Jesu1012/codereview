@@ -1,5 +1,6 @@
 package com.xyz.codereview.Vista.Scene1.Extend
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -232,13 +233,8 @@ fun LoginForm(expanded: () -> Unit) {
 
         TextButton(
             onClick = {
-                obtenerUsuarioPorEmailYPassword(email.value,password.value,
-                    {
-                        SettingsState.usuarioCurrent = it
-                    }
-                    ,{})
-                expanded()
-                      },
+                obtenerUsuario(email.value, password.value, expanded)
+            },
             enabled = email.value.isNotEmpty() && password.value.isNotEmpty(),
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
@@ -247,7 +243,39 @@ fun LoginForm(expanded: () -> Unit) {
     }
 }
 
-
+fun obtenerUsuario(
+    email: String,
+    password: String,
+    expanded: () -> Unit,
+    retry: Boolean = true
+) {
+    obtenerUsuarioPorEmailYPassword(
+        email,
+        password,
+        { usuario ->
+            if (usuario != null) {
+                SettingsState.usuarioCurrent = usuario
+                Log.d("Login", "Usuario encontrado ${SettingsState.usuarioCurrent?.email}")
+                expanded()
+            } else if (retry) {
+                Log.d("Login", "Usuario no encontrado, reintentando...")
+                obtenerUsuario(email, password, expanded, retry = false)
+            } else {
+                Log.d("Login", "Usuario no encontrado en segundo intento.")
+                // Manejo de error adicional si es necesario
+            }
+        },
+        {
+            Log.d("Login", "Error al buscar usuario.")
+            if (retry) {
+                obtenerUsuario(email, password, expanded, retry = false)
+            } else {
+                Log.d("Login", "Usuario no encontrado después de reintento.")
+                // Manejo de error adicional si es necesario
+            }
+        }
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

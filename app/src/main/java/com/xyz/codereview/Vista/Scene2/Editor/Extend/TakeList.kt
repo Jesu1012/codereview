@@ -21,17 +21,31 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.gson.annotations.SerializedName
+import com.xyz.codereview.Modelo.BoxState
 import com.xyz.codereview.R
+import java.util.UUID
+
+/*data class BoxState(
+    @SerializedName("pasteLocalState") var pasteLocalState: Boolean,
+    @SerializedName("clipboardText") var clipboardText: String,
+    @SerializedName("isChecked") var isChecked: Boolean = false,
+    @SerializedName("listTasks") val listTasks: List<Task> = listOf(),
+    @SerializedName("listTasksCompleted") val listTasksCompleted: List<Task> = listOf()
+)*/
+
+data class Task(
+    @SerializedName("id") val id: String = UUID.randomUUID().toString(),
+    @SerializedName("content") val content: String
+)
 
 @Composable
-fun TaskList(colorTheme : Color) {
-    var title by remember { mutableStateOf("Título") }
-    var tasks by remember { mutableStateOf(listOf("Elemento de la lista")) }
-    var completedTasks by remember { mutableStateOf(listOf<String>()) }
+fun TaskList(boxState: BoxState, onStateChange: (BoxState) -> Unit, colorTheme: Color) {
+    var title by remember { mutableStateOf("Title") }
     var newTaskText by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.padding(16.dp)) {
-        Row (modifier = Modifier.fillMaxWidth()){
+        Row(modifier = Modifier.fillMaxWidth()) {
             BasicTextField(
                 value = title,
                 onValueChange = { title = it },
@@ -44,34 +58,49 @@ fun TaskList(colorTheme : Color) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-
         LazyColumn {
-            items(tasks) { task ->
+            items(boxState.listTasks) { task ->
                 TaskItem(
                     task = task,
                     onCheckedChange = {
-                        tasks = tasks - task
-                        completedTasks = completedTasks + task
+                        val newState = boxState.copy(
+                            listTasks = boxState.listTasks - task,
+                            listTasksCompleted = boxState.listTasksCompleted + task
+                        )
+                        onStateChange(newState)
                     },
                     onDeleteItem = {
-                        tasks = tasks - task
+                        val newState = boxState.copy(
+                            listTasks = boxState.listTasks - task
+                        )
+                        onStateChange(newState)
                     },
-                    onTaskChange = {newTask ->
-                        tasks = tasks.map { if (it == task) newTask else it }
+                    onTaskChange = { newTaskContent ->
+                        val newState = boxState.copy(
+                            listTasks = boxState.listTasks.map {
+                                if (it.id == task.id) it.copy(content = newTaskContent) else it
+                            }
+                        )
+                        onStateChange(newState)
                     },
                     colorTheme = colorTheme
                 )
             }
-
         }
+
         AddTaskItem(
             onAddTask = {
-                tasks = tasks + newTaskText
+
+                val newState = boxState.copy(
+                    listTasks = boxState.listTasks + Task(content = newTaskText)
+                )
+                onStateChange(newState)
                 newTaskText = ""
+
             }
         )
 
-        if (completedTasks.isNotEmpty()) {
+        if (boxState.listTasksCompleted.isNotEmpty()) {
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "Elementos marcados",
@@ -81,12 +110,15 @@ fun TaskList(colorTheme : Color) {
             Spacer(modifier = Modifier.height(8.dp))
 
             LazyColumn {
-                items(completedTasks) { task ->
+                items(boxState.listTasksCompleted) { task ->
                     CompletedTaskItem(
                         task = task,
                         onUnchecked = {
-                            completedTasks = completedTasks - task
-                            tasks = tasks + task
+                            val newState = boxState.copy(
+                                listTasksCompleted = boxState.listTasksCompleted - task,
+                                listTasks = boxState.listTasks + task
+                            )
+                            onStateChange(newState)
                         }
                     )
                 }
@@ -95,34 +127,32 @@ fun TaskList(colorTheme : Color) {
 
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "${completedTasks.size} elementos marcados",
+            text = "${boxState.listTasksCompleted.size} marked elements",
             style = MaterialTheme.typography.bodyMedium,
             color = Color.Gray
         )
     }
 }
 
-@Composable
-fun TaskItem(task: String,onCheckedChange: () -> Unit, onDeleteItem: () -> Unit, onTaskChange: (String) -> Unit, colorTheme : Color) {
 
+
+@Composable
+fun TaskItem(task: Task, onCheckedChange: () -> Unit, onDeleteItem: () -> Unit, onTaskChange: (String) -> Unit, colorTheme: Color) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
-        IconButton(onClick = { onDeleteItem()}) {
+        IconButton(onClick = { onDeleteItem() }) {
             Icon(painter = painterResource(id = R.drawable.ic_delete), contentDescription = "")
         }
 
         Checkbox(
             checked = false,
-            onCheckedChange = {
-
-                onCheckedChange()
-            }
+            onCheckedChange = { onCheckedChange() }
         )
         Spacer(modifier = Modifier.width(8.dp))
         BasicTextField(
-            value = task,
+            value = task.content,
             onValueChange = onTaskChange,
             textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color.Gray),
             modifier = Modifier
@@ -134,9 +164,8 @@ fun TaskItem(task: String,onCheckedChange: () -> Unit, onDeleteItem: () -> Unit,
     Spacer(modifier = Modifier.height(8.dp))
 }
 
-
 @Composable
-fun CompletedTaskItem(task: String, onUnchecked: () -> Unit) {
+fun CompletedTaskItem(task: Task, onUnchecked: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
@@ -147,12 +176,11 @@ fun CompletedTaskItem(task: String, onUnchecked: () -> Unit) {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = task,
+            text = task.content,
             style = MaterialTheme.typography.bodyLarge.copy(
                 color = Color.Gray,
                 textDecoration = TextDecoration.LineThrough
             )
-
         )
     }
     Spacer(modifier = Modifier.height(8.dp))
@@ -164,22 +192,13 @@ fun AddTaskItem(onAddTask: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
-                onAddTask()
-            }
+            .clickable { onAddTask() }
     ) {
-
-
-        Icon(Icons.Default.Add, contentDescription = "Agregar tarea")
-
+        Icon(Icons.Default.Add, contentDescription = "Add Task")
         Text(
-            text = "Agregar elemento a la lista",
-            style = MaterialTheme.typography.bodyLarge.copy(
-                color = Color.Gray
-            )
-
+            text = "Add item to list",
+            style = MaterialTheme.typography.bodyLarge.copy(color = Color.Gray)
         )
-
     }
 }
 
@@ -187,6 +206,6 @@ fun AddTaskItem(onAddTask: () -> Unit) {
 @Composable
 fun PreviewTaskList() {
     Surface {
-        TaskList(Color.Red)
+        //TaskList(Color.Red)
     }
 }

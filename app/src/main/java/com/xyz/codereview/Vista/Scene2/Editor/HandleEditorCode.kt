@@ -453,7 +453,7 @@ fun HandleEditorCode(
                     },
                 contentAlignment = Alignment.Center
             ) {
-                Text("Arrastra aquí para mover", color = colorTheme)
+                Text("Drag here to move", color = colorTheme)
             }
         }
 
@@ -724,7 +724,7 @@ fun DynamicBox(
                         }
                     }
                     if (takeBox) {
-                        TaskList(colorTheme)
+                        TaskList(boxState = state, onStateChange = onStateChange, colorTheme = colorTheme)
                     }
 
                     if (editBox) {
